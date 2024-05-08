@@ -19,8 +19,10 @@ class _TextHoverWidgetState extends State<TextHoverWidget> {
     double fontSize = width >= height ? width * 0.015 : height * 0.015;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: MouseRegion(
+        cursor: MaterialStateMouseCursor.clickable,
+        opaque: false,
         onEnter: (event) {
           setState(() {
             hover = true;
@@ -34,7 +36,7 @@ class _TextHoverWidgetState extends State<TextHoverWidget> {
         child: Text(
           widget.text,
           style: TextStyle(
-            color: hover ? Colors.red : Colors.grey,
+            color: hover ? Colors.red : Colors.blueGrey,
             fontSize: fontSize,
           ),
         ),
