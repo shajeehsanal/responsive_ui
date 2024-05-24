@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:responsive_ui/common/search_button.dart';
 import 'package:responsive_ui/common/text_hover_widget.dart';
 
 double width = 0;
@@ -33,106 +35,138 @@ class _HomePageState extends State<HomePage> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        if (width >= height) {
+          _containerHeight = 0;
+          _menuIcon = true;
+          _showDrawer = false;
+        }
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: appBar(fontSize),
-          body: Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: height * 0.2),
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: const AssetImage('assets/images/banner.jpg'),
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.high,
-                    colorFilter: ColorFilter.mode(
-                      Colors.grey.shade700.withOpacity(0.5),
-                      BlendMode.srcOver,
-                    ),
-                  ),
-                ),
-                child: Column(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                appBar(fontSize),
+                Stack(
                   children: [
-                    Center(
+                    Container(
+                      padding: EdgeInsets.only(top: height * 0.2),
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/banner.jpg'),
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                          colorFilter: ColorFilter.mode(
+                            Colors.grey.shade700.withOpacity(0.5),
+                            BlendMode.srcOver,
+                          ),
+                        ),
+                      ),
                       child: Column(
                         children: [
-                          Text(
-                            'BEST PLACE TO FIND AND EXPLORE',
-                            style: TextStyle(
-                              fontSize: fontSize * 2,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
+                          Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'BEST PLACE TO FIND AND EXPLORE',
+                                  style: TextStyle(
+                                    fontSize: fontSize * 2,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  'THAT ALL YOU NEED',
+                                  style: TextStyle(
+                                    fontSize: fontSize * 2,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Find Best Place, Restaurant, Hotel, Real State and many more think in just One click',
+                                  style: TextStyle(
+                                    fontSize: fontSize,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          Text(
-                            'THAT ALL YOU NEED',
-                            style: TextStyle(
-                              fontSize: fontSize * 2,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
+                          if (width >= 1000)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  flex: 6,
+                                  child: searchSection(fontSize),
+                                ),
+                                const Expanded(flex: 1, child: SearchButton()),
+                                SizedBox(width: width * 0.03),
+                              ],
+                            )
+                          else
+                            Column(
+                              children: [
+                                searchSection(fontSize),
+                                const SearchButton(),
+                              ],
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Find Best Place, Restaurant, Hotel, Real State and many more think in just One click',
-                            style: TextStyle(
-                              fontSize: fontSize,
-                              color: Colors.white,
-                            ),
-                          ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.1)
-                          .copyWith(top: 20),
-                      child: width <= 800
-                          ? Column(
-                              children: searchFields(fontSize),
-                            )
-                          : Row(
-                              children: searchFields(fontSize),
+                    AnimatedContainer(
+                      color: Colors.white,
+                      duration: const Duration(milliseconds: 300),
+                      height: _containerHeight,
+                      width: width,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        thumbVisibility: true,
+                        trackVisibility: true,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextHoverWidget(text: 'HOME'),
+                                TextHoverWidget(text: 'HOW IT WORKS'),
+                                TextHoverWidget(text: 'EXPLORE'),
+                                TextHoverWidget(text: 'REVIEW'),
+                                TextHoverWidget(text: 'BLOG'),
+                                TextHoverWidget(text: 'CONTACT'),
+                              ],
                             ),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
-              ),
-              AnimatedContainer(
-                color: Colors.white,
-                duration: const Duration(milliseconds: 300),
-                height: _containerHeight,
-                width: width,
-                child: Scrollbar(
-                  controller: _scrollController,
-                  thumbVisibility: true,
-                  trackVisibility: true,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextHoverWidget(text: 'HOME'),
-                          TextHoverWidget(text: 'HOW IT WORKS'),
-                          TextHoverWidget(text: 'EXPLORE'),
-                          TextHoverWidget(text: 'REVIEW'),
-                          TextHoverWidget(text: 'BLOG'),
-                          TextHoverWidget(text: 'CONTACT'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Padding searchSection(double fontSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: width * 0.01).copyWith(top: 20),
+      child: width <= 800
+          ? Column(
+              children: searchFields(fontSize),
+            )
+          : Row(
+              children: searchFields(fontSize),
+            ),
     );
   }
 
@@ -199,8 +233,8 @@ class _HomePageState extends State<HomePage> {
                   : OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10).copyWith(
-                        topRight: Radius.zero,
-                        bottomRight: Radius.zero,
+                        topLeft: Radius.zero,
+                        bottomLeft: Radius.zero,
                       ),
                     ),
               errorBorder: width <= 800
@@ -208,8 +242,8 @@ class _HomePageState extends State<HomePage> {
                   : OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10).copyWith(
-                        topRight: Radius.zero,
-                        bottomRight: Radius.zero,
+                        topLeft: Radius.zero,
+                        bottomLeft: Radius.zero,
                       ),
                     ),
               enabledBorder: width <= 800
@@ -217,8 +251,8 @@ class _HomePageState extends State<HomePage> {
                   : OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10).copyWith(
-                        topRight: Radius.zero,
-                        bottomRight: Radius.zero,
+                        topLeft: Radius.zero,
+                        bottomLeft: Radius.zero,
                       ),
                     ),
               focusedBorder: width <= 800
@@ -226,8 +260,8 @@ class _HomePageState extends State<HomePage> {
                   : OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10).copyWith(
-                        topRight: Radius.zero,
-                        bottomRight: Radius.zero,
+                        topLeft: Radius.zero,
+                        bottomLeft: Radius.zero,
                       ),
                     ),
               disabledBorder: width <= 800
@@ -235,8 +269,8 @@ class _HomePageState extends State<HomePage> {
                   : OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10).copyWith(
-                        topRight: Radius.zero,
-                        bottomRight: Radius.zero,
+                        topLeft: Radius.zero,
+                        bottomLeft: Radius.zero,
                       ),
                     ),
               focusedErrorBorder: width <= 800
